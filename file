@@ -1,0 +1,21 @@
+def class_time_table():
+    fpath = r"D:\OneDrive - weixinedu\课表预排.xlsx"
+
+    data0 = pd.read_excel(fpath, sheet_name="教师姓名表", engine='openpyxl')
+    gc.collect()
+
+    classtime_table = []
+    xls = pd.ExcelFile(fpath, engine='openpyxl')
+    for sheet in xls.sheet_names:
+        print(sheet)
+        if sheet != "教师姓名表":
+        #if sheet == "2024年寒假":
+            data = pd.read_excel(xls, sheet_name=sheet,header=None,  engine='openpyxl')
+            #print(data)
+            classtime_table_one_sheet = get_info_one_sheet(sheet, data0, data)
+            classtime_table += classtime_table_one_sheet
+
+    classtime_table = pd.DataFrame(classtime_table)
+    classtime_table.columns = ['上课时间', '课表教师姓名', '上课日期', '值', '教师姓名']
+    classtime_table.to_excel(r"D:\OneDrive - weixinedu\OA\课表整理结果\课表预排结果.xlsx", index=False)
+    print("课表整理完毕")
